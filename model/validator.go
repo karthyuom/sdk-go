@@ -110,6 +110,8 @@ func validateTaskItem(sl validator.StructLevel) {
 		validateConcreteTask(sl, t, "Task")
 	case *CallFunction:
 		validateConcreteTask(sl, t, "Task")
+	case *CallAgent:
+		validateConcreteTask(sl, t, "Task")
 	case *DoTask:
 		validateConcreteTask(sl, t, "Task")
 	case *ForkTask:

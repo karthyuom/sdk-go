@@ -123,7 +123,8 @@ var taskTypeRegistry = map[string]func() Task{
 	"call_openapi":  func() Task { return &CallOpenAPI{} },
 	"call_grpc":     func() Task { return &CallGRPC{} },
 	"call_asyncapi": func() Task { return &CallAsyncAPI{} },
-	"call":          func() Task { return &CallFunction{} },
+	"call_function": func() Task { return &CallFunction{} },
+	"call_agent":    func() Task { return &CallAgent{} },
 	"do":            func() Task { return &DoTask{} },
 	"fork":          func() Task { return &ForkTask{} },
 	"emit":          func() Task { return &EmitTask{} },
@@ -283,6 +284,17 @@ func (ti *TaskItem) AsCallFunctionTask() *CallFunction {
 		return nil
 	}
 	if task, ok := ti.Task.(*CallFunction); ok {
+		return task
+	}
+	return nil
+}
+
+// AsCallAgentTask casts the Task to a CallAgent task if possible, returning nil if the cast fails.
+func (ti *TaskItem) AsCallAgentTask() *CallAgent {
+	if ti == nil {
+		return nil
+	}
+	if task, ok := ti.Task.(*CallAgent); ok {
 		return task
 	}
 	return nil

@@ -130,3 +130,13 @@ type CallFunction struct {
 func (c *CallFunction) GetBase() *TaskBase {
 	return &c.TaskBase
 }
+
+type CallAgent struct {
+	TaskBase `json:",inline"`       // Inline TaskBase fields
+	Call     string                 `json:"call" validate:"required"`
+	With     map[string]interface{} `json:"with,omitempty"`
+}
+
+func (c *CallAgent) GetBase() *TaskBase {
+	return &c.TaskBase
+}
