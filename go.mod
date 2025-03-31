@@ -1,4 +1,4 @@
-module github.com/serverlessworkflow/sdk-go/v3
+module github.com/karthyuom/sdk-go/v3
 
 go 1.23.0
 
