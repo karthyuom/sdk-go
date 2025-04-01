@@ -158,9 +158,11 @@ func unmarshalTask(key string, taskRaw json.RawMessage) (Task, error) {
 		} else {
 			// check for function or agent catalog if exists
 			catType := strings.Split(callValue, "/")
+			fmt.Printf("DEBUG: lookup catalog type %s", catType[0])
 			if (len(catType) > 1) {
 				registryKey = fmt.Sprintf("call_%s", catType[0])
 				if constructor, exists := taskTypeRegistry[registryKey]; exists {
+					fmt.Printf("DEBUG: calling constructor")
 					task = constructor()
 				} else {
 					// Default to CallFunction for unrecognized call values
