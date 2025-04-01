@@ -229,6 +229,8 @@ func (ti *TaskItem) AsTask() *TaskBase {
 		return &task.TaskBase
 	case *CallFunction:
 		return &task.TaskBase
+	case *CallAgent:
+		return &task.TaskBase
 	case *DoTask:
 		return &task.TaskBase
 	case *ForkTask:
