@@ -17,9 +17,10 @@ package model
 import (
 	"errors"
 	"fmt"
-	"github.com/go-playground/validator/v10"
 	"regexp"
 	"strings"
+
+	"github.com/go-playground/validator/v10"
 )
 
 var (
@@ -108,6 +109,8 @@ func validateTaskItem(sl validator.StructLevel) {
 	case *CallAsyncAPI:
 		validateConcreteTask(sl, t, "Task")
 	case *CallFunction:
+		validateConcreteTask(sl, t, "Task")
+	case *CallAgent:
 		validateConcreteTask(sl, t, "Task")
 	case *DoTask:
 		validateConcreteTask(sl, t, "Task")
