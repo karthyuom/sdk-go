@@ -18,6 +18,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strings"
 )
 
 type TaskBase struct {
@@ -126,8 +127,8 @@ var taskTypeRegistry = map[string]func() Task{
 	"call_openapi":  func() Task { return &CallOpenAPI{} },
 	"call_grpc":     func() Task { return &CallGRPC{} },
 	"call_asyncapi": func() Task { return &CallAsyncAPI{} },
-	"call_function": func() Task { return &CallFunction{} },
- 	"call_agent":    func() Task { return &CallAgent{} },
+	"call_functions": func() Task { return &CallFunction{} },
+ 	"call_agents":    func() Task { return &CallAgent{} },
 	"do":            func() Task { return &DoTask{} },
 	"fork":          func() Task { return &ForkTask{} },
 	"emit":          func() Task { return &EmitTask{} },
@@ -155,8 +156,20 @@ func unmarshalTask(key string, taskRaw json.RawMessage) (Task, error) {
 		if constructor, exists := taskTypeRegistry[registryKey]; exists {
 			task = constructor()
 		} else {
-			// Default to CallFunction for unrecognized call values
-			task = &CallFunction{}
+			// check for function or agent catalog if exists
+			catType := strings.Split(callValue, "/")
+			if (len(catType) > 1) {
+				registryKey = fmt.Sprintf("call_%s", catType[0])
+				if constructor, exists := taskTypeRegistry[registryKey]; exists {
+					task = constructor()
+				} else {
+					// Default to CallFunction for unrecognized call values
+					task = &CallFunction{}
+				}
+			} else {
+				// Default to CallFunction for unrecognized call values
+				task = &CallFunction{}
+			}
 		}
 	} else {
 		// Handle non-call tasks (e.g., "do", "fork")
